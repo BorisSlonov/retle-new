@@ -876,6 +876,7 @@ img {
   margin-left: auto;
   margin-right: auto;
   position: relative;
+  overflow-x: hidden;
 }
 
 .swiper-container-home {
@@ -1089,10 +1090,6 @@ img {
 }
 
 @media (max-width: 920px) {
-  .swiper-container-houses {
-    overflow-x: hidden;
-  }
-
   .more-services__main-row {
     flex-direction: column;
   }
