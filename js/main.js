@@ -229,6 +229,19 @@ var swiperHouses = new Swiper('.swiper-container-houses', {
   }
 });
 $(document).ready(function () {
+  var header = $('.header'),
+      scrollPrev = 0;
+  $(window).scroll(function () {
+    var scrolled = $(window).scrollTop();
+
+    if (scrolled > 50 && scrolled > scrollPrev) {
+      header.addClass('out');
+    } else {
+      header.removeClass('out');
+    }
+
+    scrollPrev = scrolled;
+  });
   $('a[href*="#"]').click(function (event) {
     if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') && location.hostname == this.hostname) {
       var target = $(this.hash);
@@ -251,7 +264,47 @@ $(document).ready(function () {
 
     $(this).next().slideToggle(500);
   }
-});
+}); //forms 
+// Отправка данных на сервер
+
+function send(event, php) {
+  console.log("Отправка запроса");
+  event.preventDefault ? event.preventDefault() : event.returnValue = false;
+  var req = new XMLHttpRequest();
+  req.open('POST', php, true);
+
+  req.onload = function () {
+    if (req.status >= 200 && req.status < 400) {
+      json = JSON.parse(this.response); // Ебанный internet explorer 11
+
+      console.log(json); // ЗДЕСЬ УКАЗЫВАЕМ ДЕЙСТВИЯ В СЛУЧАЕ УСПЕХА ИЛИ НЕУДАЧИ
+
+      if (json.result == "success") {
+        var closePopup = function closePopup() {
+          $.fancybox.close();
+          $.fancybox.close();
+        };
+
+        // Если сообщение отправлено
+        $.fancybox.open('<div class="message"><h2>Спасибо за заявку!</h2><p>Мы свяжемся с вами в ближайшее время</p></div>');
+        setTimeout(closePopup, 3000);
+      } else {
+        // Если произошла ошибка
+        alert("Ошибка. Сообщение не отправлено");
+      } // Если не удалось связаться с php файлом
+
+    } else {
+      alert("Ошибка сервера. Номер: " + req.status);
+    }
+  }; // Если не удалось отправить запрос. Стоит блок на хостинге
+
+
+  req.onerror = function () {
+    alert("Ошибка отправки запроса");
+  };
+
+  req.send(new FormData(event.target));
+}
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js")))
 
 /***/ }),
